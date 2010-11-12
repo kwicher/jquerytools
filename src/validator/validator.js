@@ -1,18 +1,18 @@
 /**
  * @license 
- * jQuery Tools Validator @VERSION - HTML5 is here. Now use it.
+ * jQuery Tools Validator 1.2.5 - HTML5 is here. Now use it.
  * 
  * NO COPYRIGHTS OR LICENSES. DO WHAT YOU LIKE.
  * 
  * http://flowplayer.org/tools/form/validator/
  * 
  * Since: Mar 2010
- * Date: @DATE 
+ * Date:    Wed Sep 22 06:02:10 2010 +0000 
  */
 /*jslint evil: true */ 
 (function($) {	
 
-	$.tools = $.tools || {version: '@VERSION'};
+	$.tools = $.tools || {version: '1.2.5'};
 		
 	// globals
 	var typeRe = /\[type=([a-z]+)\]/, 
@@ -99,15 +99,14 @@
 	function getPosition($trigger, el, conf) {	
 		
 		// get origin top/left position 
-		var top = trigger.offset().top, 
-			 left = trigger.offset().left,	 
+		var top = $trigger.offset().top, 
+			 left = $trigger.offset().left,	 
 			 pos = conf.position.split(/,?\s+/),
 			 y = pos[0],
 			 x = pos[1];
 		
 		top  -= el.outerHeight() - conf.offset[0];
-		left += trigger.outerWidth() + conf.offset[1];
-		
+		left += $trigger.outerWidth() + conf.offset[1];
 		
 		// iPad position fix
 		if (/iPad/i.test(navigator.userAgent)) {
@@ -115,19 +114,18 @@
 		}
 		
 		// adjust Y		
-		var height = el.outerHeight() + trigger.outerHeight();
+		var height = el.outerHeight() + $trigger.outerHeight();
 		if (y == 'center') 	{ top += height / 2; }
 		if (y == 'bottom') 	{ top += height; }
 		
 		// adjust X
-		var width = trigger.outerWidth();
+		var width = $trigger.outerWidth();
 		if (x == 'center') 	{ left -= (width  + el.outerWidth()) / 2; }
 		if (x == 'left')  	{ left -= width; }	 
 		
 		return {top: top, left: left};
 	}	
 	
-
 */
 	
 	// $.is("[type=xxx]") or $.filter("[type=xxx]") not working in jQuery 1.3.2 or 1.4.2
@@ -173,6 +171,7 @@
 					$.each(err.messages, function(i, m) { 
 						$("<p/>").html(m).appendTo(msg);			
 					});
+				
 				//KWICHER: semms unnecessary	
 				//	// make sure the width is not full body width so it can be positioned correctly
 				//	if (msg.outerWidth() == msg.parent().width()) {
@@ -323,7 +322,7 @@
 				inputs.each(function()  {
 					var input = $(this),
 						 msg = input.data("msg.el");
-						 
+						
 					if (msg) {						
 						//var pos = getPosition(input, msg, conf); <- KWICHER: obsolete
 						
@@ -375,17 +374,20 @@
 					var msg = $(this).data("msg.el");
 					if (msg) {
 						msg.remove();
-						$(this).data("msg.el", null);
+						
 					}
+					
+					$(this).data("msg.el", null);
 				}).unbind(conf.errorInputEvent || '');
 				return self;
 			},
 			
-			destroy: function() { 
-				form.unbind(conf.formEvent + ".V").unbind("reset.V"); 
-				inputs.unbind(conf.inputEvent + ".V").unbind("change.V");
-				return self.reset();	
-			}, 
+			destroy: function() { 		
+			form.unbind(conf.formEvent + ".V").unbind("reset.V"); 
+			inputs.unbind(conf.inputEvent + ".V").unbind("change.V");
+			return self.reset();
+					
+		}, 
 			
 			
 //{{{  checkValidity() - flesh and bone of this tool
@@ -573,7 +575,7 @@
 		
 		var instance = this.data("validator");
 		
-		// destroy existing instance
+		// destroy existing instance -- kwicher: As for me it does not do anything
 		if (instance) { 
 			instance.destroy();
 			this.removeData("validator");
