@@ -94,8 +94,9 @@
 		
 	};
 	
-	/* calculate error message position relative to the input */  	
-	function getPosition(trigger, el, conf) {	
+	/*KWICHER: OBSOLETE*/
+	/* calculate error message position relative to the input   	
+	function getPosition($trigger, el, conf) {	
 		
 		// get origin top/left position 
 		var top = trigger.offset().top, 
@@ -127,6 +128,7 @@
 	}	
 	
 
+*/
 	
 	// $.is("[type=xxx]") or $.filter("[type=xxx]") not working in jQuery 1.3.2 or 1.4.2
 	function isType(type) { 
@@ -153,13 +155,14 @@
 					// add error class	
 					var input = err.input;					
 					input.addClass(conf.errorClass);
-					
 					// get handle to the error container
 					var msg = input.data("msg.el"); 
-					
+				
 					// create it if not present
 					if (!msg) { 
-						msg = $(conf.message).addClass(conf.messageClass).appendTo(document.body);
+					
+					//KWICHER: attach the errormessage to the parent of the INPUT
+						msg = $(conf.message).addClass(conf.messageClass).insertAfter(input);
 						input.data("msg.el", msg);
 					}  
 					
@@ -170,17 +173,20 @@
 					$.each(err.messages, function(i, m) { 
 						$("<p/>").html(m).appendTo(msg);			
 					});
-					
-					// make sure the width is not full body width so it can be positioned correctly
-					if (msg.outerWidth() == msg.parent().width()) {
-						msg.add(msg.find("p")).css({display: 'inline'});		
-					} 
+				//KWICHER: semms unnecessary	
+				//	// make sure the width is not full body width so it can be positioned correctly
+				//	if (msg.outerWidth() == msg.parent().width()) {
+				//	msg.add(msg.find("p")).css({display: 'inline'});		
+				//	} 
 					
 					// insert into correct position (relative to the field)
-					var pos = getPosition(input, msg, conf); 
-					 
-					msg.css({ visibility: 'visible', position: 'absolute', top: pos.top, left: pos.left })
-						.fadeIn(conf.speed);     
+					//var pos = getPosition(input, msg, conf); <--KWICHER: obsolete
+					
+					//KWICHER: positioning of the error message
+					msg.add(msg.find("p")).css({ display: 'inline'});
+					msg.css({visibility: 'visible', position: 'relative', top: conf.offset[0], left: conf.offset[1],})
+						.fadeIn(conf.speed);  
+					   
 				});
 						
 				
@@ -319,8 +325,10 @@
 						 msg = input.data("msg.el");
 						 
 					if (msg) {						
-						var pos = getPosition(input, msg, conf);
-						msg.css({ top: pos.top, left: pos.left });
+						//var pos = getPosition(input, msg, conf); <- KWICHER: obsolete
+						
+						//KWICHER: positioning 
+						msg.css({ position:'relative', top: '0px', left: '0px' });
 					}
 				});
 				return self;
@@ -340,10 +348,12 @@
 							input.trigger("OI", [val]);
 							
 							errors.push({ input: input, messages: [val]});				
-						}
+						};
+						
 					});
 
 				  	errs = errors; 
+				  	
 					e = $.Event();
 				}
 				
